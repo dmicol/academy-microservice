@@ -1,11 +1,24 @@
 server:
   port: 8888
-spring:
-  application:
-    name: zuul-server
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+    web:
+      exposure:
+        include: "*"
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:7777/eureka/
   instance:
     preferIpAddress: true
+
+zuul:
+  routes:
+    zuul-server: /self/**
+    microservice: /microservice/**
+    microservice-client: /microservice-client/**

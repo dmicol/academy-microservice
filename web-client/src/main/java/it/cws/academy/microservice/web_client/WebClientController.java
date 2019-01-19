@@ -26,8 +26,24 @@ public class WebClientController {
   @Autowired
   private DiscoveryClient discoveryClient;
 
-  @GetMapping("/")
-  public String handleRequest(@RequestParam(value="id") int id, Model model) {
+  @GetMapping("/zuul")
+  public String handleRequestZuul(@RequestParam(value="id") int id, Model model) {
+      //accessing hello-service
+      List<ServiceInstance> instances = discoveryClient.getInstances("zuul-server");
+      if (instances != null && instances.size() > 0) {
+          ServiceInstance serviceInstance = instances.get(0);
+          String url = serviceInstance.getUri().toString();
+          url = url + "microservice/pers?id="+id;
+          RestTemplate restTemplate = new RestTemplate();
+          Person pers = restTemplate.getForObject(url, Person.class);
+          model.addAttribute("msg", pers.getName());
+          model.addAttribute("time", LocalDateTime.now());
+      }
+      return "hello-page";
+  }
+  
+  @GetMapping("/micro")
+  public String handleRequestMicro(@RequestParam(value="id") int id, Model model) {
       //accessing hello-service
       List<ServiceInstance> instances = discoveryClient.getInstances("microservice");
       if (instances != null && instances.size() > 0) {//todo: replace with a load balancing mechanism
