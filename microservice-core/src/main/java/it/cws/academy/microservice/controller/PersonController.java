@@ -31,7 +31,7 @@ public class PersonController {
 	@GetMapping(path="/pers")
 	public Person pers(@RequestParam(value="id") int id) {
 		log.info("called pers:"+id);
-		return repo.findById(id).orElseThrow();
+		return repo.findById(id).get();
 		
 	}
 }

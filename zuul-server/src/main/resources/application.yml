@@ -1,0 +1,11 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: zuul-server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:7777/eureka/
+  instance:
+    preferIpAddress: true
